@@ -56,6 +56,51 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     chartGroup.append("g")
       .call(leftAxis);
 
+      svg
+    .append('g')
+    .attr('class','xText')
+
+  var xText = d3.select('.xText')
+  function xTextRefresh() {
+    xText.attr(
+      'transform',
+      `translate(${((width - labelArea) / 2 + labelArea)}, ${(height - margin.top - margin.right)})`
+    );
+  };
+  xTextRefresh();
+
+  xText
+    .append('text')
+    .text('In Poverty (%)')
+    .attr('y', 125)
+    .attr("x", 53.345)
+    .attr('data-name', 'poverty')
+    .attr('data-axis', 'x')
+    .attr('class', 'aText active x');
+
+  svg
+    .append('g')
+    .attr('class','yText')
+
+  var yText = d3.select('.yText')
+  function yTextRefresh() {
+    yText.attr(
+      'transform',
+      `translate(${((width - labelArea) / 2 + labelArea)}, ${(height - margin.top - margin.right)})`
+    );
+  };
+  yTextRefresh();
+
+  yText
+    .append('text')
+    .attr("transform", "rotate(-90)")
+    .text('Lacks Healthcare (%)')
+    .attr('y', -420)
+    .attr("x", svgHeight / 2 - labelArea)
+    .attr('data-name', 'poverty')
+    .attr('data-axis', 'x')
+    .attr('class', 'aText active x');
+
     // Step 5: Create Circles
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
@@ -100,62 +145,3 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
         toolTip.hide(data);
       });
   });
-
-
-  svg
-    .append('g')
-    .attr('class','xText')
-
-  var xText = d3.select('.xText')
-  function xTextRefresh() {
-    xText.attr(
-      'transform',
-      `translate(${((width - labelArea) / 2 + labelArea)}, ${(height - margin.top - margin.right)})`
-    );
-  };
-  xTextRefresh();
-
-  xText
-    .append('text')
-    .text('In Poverty (%)')
-    .attr('y', 125)
-    .attr("x", 53.345)
-    .attr('data-name', 'poverty')
-    .attr('data-axis', 'x')
-    .attr('class', 'aText active x');
-  // xText
-  //   .append('text')
-  //   .text('Age (Median)')
-  //   .attr('y',0)
-  //   .attr('data-name', 'age')
-  //   .attr('data-axis', 'x')
-  //   .attr('class', 'aText inactive x');
-  // xText
-  //   .append('text')
-  //   .text('Household Income (Median)')
-  //   .attr('y',26)
-  //   .attr('data-name', 'income')
-  //   .attr('data-axis', 'x')
-  //   .attr('class', 'aText inactive x');
-  svg
-    .append('g')
-    .attr('class','yText')
-
-  var yText = d3.select('.yText')
-  function yTextRefresh() {
-    yText.attr(
-      'transform',
-      `translate(${((width - labelArea) / 2 + labelArea)}, ${(height - margin.top - margin.right)})`
-    );
-  };
-  yTextRefresh();
-
-  yText
-    .append('text')
-    .attr("transform", "rotate(-90)")
-    .text('Lacks Healthcare (%)')
-    .attr('y', -420)
-    .attr("x", svgHeight / 2 - labelArea)
-    .attr('data-name', 'poverty')
-    .attr('data-axis', 'x')
-    .attr('class', 'aText active x');

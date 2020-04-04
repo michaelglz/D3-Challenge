@@ -1,4 +1,4 @@
-var svgWidth = 959;
+var svgWidth = 960;
 var svgHeight = 500;
 var labelArea = 110;
 var margin = {
@@ -59,21 +59,29 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     // Step 5: Create Circles
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
-    .data(stateData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d.poverty))
-    .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", "15")
-    .attr("fill", "lightblue")
-    .attr("opacity", ".5")
-    .text('In Poverty (%)');
+      .data(stateData)
+      .enter()
+      .append("g")
+
+      circlesGroup
+        .append("circle")
+        .attr("cx", d => xLinearScale(d.poverty))
+        .attr("cy", d => yLinearScale(d.healthcare))
+        .attr("r", "15")
+        .attr("class", "stateCircle");      
+    
+      circlesGroup
+        .append('text')
+        .attr('dx', d => xLinearScale(d.poverty))
+        .attr('dy', d => yLinearScale(d.healthcare) + 5)
+        .text(d => d.abbr)
+        .attr("class", "stateText");
 
     // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      .offset([80, -60])
+      .offset([47, -70])
       .html(function(d) {
         return (`${d.state}<br>Poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
       });
@@ -84,29 +92,13 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
 
     // Step 8: Create event listeners to display and hide the tooltip
     // ==============================
-    circlesGroup.on("click", function(data) {
+    circlesGroup.on("mouseover", function(data) {
       toolTip.show(data, this);
     })
       // onmouseout event
       .on("mouseout", function(data, index) {
         toolTip.hide(data);
       });
-
-    // Create axes labels
-    // chartGroup.append("text")
-    //   .attr("transform", "rotate(-90)")
-    //   .attr("y", 0 - margin.left + 40)
-    //   .attr("x", 0 - (height / 2))
-    //   .attr("dy", "1em")
-    //   .attr("class", "aText")
-      // .text("Number of Billboard 100 Hits");
-
-    // chartGroup.append("text")
-      // .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
-      // .attr("class", "aText")
-      // .text("Hair Metal Band Hair Length (inches)");
-  // }).catch(function(error) {
-    // console.log(error);
   });
 
 
@@ -127,10 +119,11 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     .append('text')
     .text('In Poverty (%)')
     .attr('y', 125)
+    .attr("x", 53.345)
     .attr('data-name', 'poverty')
     .attr('data-axis', 'x')
     .attr('class', 'aText active x');
-  xText
+  // xText
   //   .append('text')
   //   .text('Age (Median)')
   //   .attr('y',0)
@@ -144,3 +137,25 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
   //   .attr('data-name', 'income')
   //   .attr('data-axis', 'x')
   //   .attr('class', 'aText inactive x');
+  svg
+    .append('g')
+    .attr('class','yText')
+
+  var yText = d3.select('.yText')
+  function yTextRefresh() {
+    yText.attr(
+      'transform',
+      `translate(${((width - labelArea) / 2 + labelArea)}, ${(height - margin.top - margin.right)})`
+    );
+  };
+  yTextRefresh();
+
+  yText
+    .append('text')
+    .attr("transform", "rotate(-90)")
+    .text('Lacks Healthcare (%)')
+    .attr('y', -420)
+    .attr("x", svgHeight / 2 - labelArea)
+    .attr('data-name', 'poverty')
+    .attr('data-axis', 'x')
+    .attr('class', 'aText active x');
